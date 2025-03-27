@@ -78,6 +78,21 @@ This is the place for you to write reflections:
 
 #### Reflection Publisher-1
 
+1. *In the Observer pattern diagram explained by the Head First Design Pattern book, Subscriber is defined as an interface. Explain based on your understanding of Observer design patterns, do we still need an interface (or `trait` in Rust) in this BambangShop case, or a single Model `struct` is enough?*
+
+    For the current case, I believe there is no need to use an interface (`trait`), and a single Model `struct` is sufficient because there is only one observer, which is the `Subscriber` class. Using an interface would be beneficial if we had multiple observers of different types.
+
+2. *`id` in `Program` and `url` in `Subscriber` is intended to be unique. Explain based on your understanding, is using `Vec` (list) sufficient or using `DashMap` (map/dictionary) like we currently use is necessary for this case?*
+
+    I think `DashMap` is the better option here. If we were to use a `Vec`, we would need two separate lists to store `id`s and `url`s, and searching for a matching pair would require iterating through the list manually. In contrast, `DashMap` allows us to store both in a single structure, making lookups more efficient. Furthermore, `DashMap` supports concurrent access, which makes it a more scalable and thread-safe choice if the application needs to handle multiple threads in the future.
+
+3. *When programming using Rust, we are enforced by rigorous compiler constraints to make a thread-safe program. In the case of the List of Subscribers (`SUBSCRIBERS`) static variable, we used the `DashMap` external library for **thread safe** `HashMap`. Explain based on your understanding of design patterns, do we still need `DashMap` or we can implement Singleton pattern instead?*
+
+    Since `BambangShop` operates in a multi-threaded environment, `DashMap` is the preferred choice over the Singleton pattern. The key reason is that `DashMap` is a thread-safe `HashMap` that allows multiple threads to access and modify data concurrently without manual synchronization. This ensures efficient and safe management of the `SUBSCRIBERS` list.
+
+    On the other hand, implementing a Singleton would mean maintaining a single instance throughout the application’s lifecycle. However, in a multi-threaded scenario, we would need to introduce locking mechanisms to prevent data races, which could lead to performance bottlenecks and potential deadlocks. Given these concerns, `DashMap` provides a more efficient and scalable approach for handling concurrent data access.
+
+
 #### Reflection Publisher-2
 
 #### Reflection Publisher-3
